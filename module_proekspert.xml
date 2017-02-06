@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_proekspert" default="compile.module.proekspert">
+  <dirname property="module.proekspert.basedir" file="${ant.file.module_proekspert}"/>
+  
+  <property name="module.jdk.home.proekspert" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.proekspert" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.proekspert" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.proekspert" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="proekspert.output.dir" value="${module.proekspert.basedir}/out/production/Proekspert"/>
+  <property name="proekspert.testoutput.dir" value="${module.proekspert.basedir}/out/test/Proekspert"/>
+  
+  <path id="proekspert.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="proekspert.module.production.classpath">
+    <path refid="${module.jdk.classpath.proekspert}"/>
+    <pathelement location="${basedir}/src/proekspert/org/jfree/jfreechart-1.0.9.jar"/>
+    <path refid="library.proekspert.classpath"/>
+    <pathelement location="${basedir}/jcommon-1.0.9.jar"/>
+    <path refid="library.jcommon-1.0.23.classpath"/>
+    <path refid="library.jfreechart-1.0.19.classpath"/>
+  </path>
+  
+  <path id="proekspert.runtime.production.module.classpath">
+    <pathelement location="${proekspert.output.dir}"/>
+    <pathelement location="${basedir}/src/proekspert/org/jfree/jfreechart-1.0.9.jar"/>
+    <path refid="library.proekspert.classpath"/>
+    <pathelement location="${basedir}/jcommon-1.0.9.jar"/>
+    <path refid="library.jcommon-1.0.23.classpath"/>
+    <path refid="library.jfreechart-1.0.19.classpath"/>
+  </path>
+  
+  <path id="proekspert.module.classpath">
+    <path refid="${module.jdk.classpath.proekspert}"/>
+    <pathelement location="${proekspert.output.dir}"/>
+    <pathelement location="${basedir}/src/proekspert/org/jfree/jfreechart-1.0.9.jar"/>
+    <path refid="library.proekspert.classpath"/>
+    <pathelement location="${basedir}/jcommon-1.0.9.jar"/>
+    <path refid="library.jcommon-1.0.23.classpath"/>
+    <path refid="library.jfreechart-1.0.19.classpath"/>
+  </path>
+  
+  <path id="proekspert.runtime.module.classpath">
+    <pathelement location="${proekspert.testoutput.dir}"/>
+    <pathelement location="${proekspert.output.dir}"/>
+    <pathelement location="${basedir}/src/proekspert/org/jfree/jfreechart-1.0.9.jar"/>
+    <path refid="library.proekspert.classpath"/>
+    <pathelement location="${basedir}/jcommon-1.0.9.jar"/>
+    <path refid="library.jcommon-1.0.23.classpath"/>
+    <path refid="library.jfreechart-1.0.19.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.proekspert">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.proekspert">
+    <patternset refid="excluded.from.module.proekspert"/>
+  </patternset>
+  
+  <path id="proekspert.module.sourcepath">
+    <dirset dir="${module.proekspert.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.proekspert" depends="compile.module.proekspert.production,compile.module.proekspert.tests" description="Compile module Proekspert"/>
+  
+  <target name="compile.module.proekspert.production" depends="register.custom.compilers" description="Compile module Proekspert; production classes">
+    <mkdir dir="${proekspert.output.dir}"/>
+    <javac2 destdir="${proekspert.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.proekspert}/javac">
+      <compilerarg line="${compiler.args.proekspert}"/>
+      <bootclasspath refid="proekspert.module.bootclasspath"/>
+      <classpath refid="proekspert.module.production.classpath"/>
+      <src refid="proekspert.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.proekspert"/>
+    </javac2>
+    
+    <copy todir="${proekspert.output.dir}">
+      <fileset dir="${module.proekspert.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.proekspert.tests" depends="register.custom.compilers,compile.module.proekspert.production" description="compile module Proekspert; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.proekspert" description="cleanup module">
+    <delete dir="${proekspert.output.dir}"/>
+    <delete dir="${proekspert.testoutput.dir}"/>
+  </target>
+</project>
